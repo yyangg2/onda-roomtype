@@ -22,6 +22,7 @@ import onda.onda_yang.domain.roomType.exception.RoomTypeNotFound;
 import onda.onda_yang.domain.roomType.repository.RoomTypeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,7 +85,7 @@ public class RoomTypeService {
 //
 //    }
 
-
+    @Transactional
     public void post(Long hotelId, RoomTypeRequest request) {
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(HotelNotFound::new);
@@ -100,9 +101,21 @@ public class RoomTypeService {
         List<FacilityOption> facilityOptions = request.getFacilityOptions();
         List<AttractionOption> attractionOptions = request.getAttractionOptions();
         List<ServiceOption> serviceOptions = request.getServiceOptions();
-
-//        List<AmenityGroup> amenityGroups = request.getAmenityGroups();
         List<AmenityOption> amenityOptions = request.getAmenityOptions();
+
+        // Null 체크 후 빈 리스트로 초기화
+        if (facilityOptions == null) {
+            facilityOptions = new ArrayList<>();
+        }
+        if (attractionOptions == null) {
+            attractionOptions = new ArrayList<>();
+        }
+        if (serviceOptions == null) {
+            serviceOptions = new ArrayList<>();
+        }
+        if (amenityOptions == null) {
+            amenityOptions = new ArrayList<>();
+        }
 
         for (FacilityOption facilityOption : facilityOptions) {
             roomType.addFacilityOption(facilityOption);
@@ -119,13 +132,6 @@ public class RoomTypeService {
         for (AmenityOption amenityOption : amenityOptions) {
             roomType.addAmenityOption(amenityOption);
         }
-
-//        for (AmenityOption amenityOption : amenityOptions) {
-//            AmenityGroup group = AmenityGroup.findGroup(amenityOption);
-//
-//        }
-
-
 
         hotel.addRoomType(roomType);
 

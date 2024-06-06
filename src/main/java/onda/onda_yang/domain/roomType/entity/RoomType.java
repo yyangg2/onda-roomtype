@@ -74,14 +74,18 @@ public class RoomType {
     public RoomType(Integer totalRoom, RoomTypeCategory roomTypeCategory) {
         this.totalRoom = totalRoom;
         this.roomTypeCategory = roomTypeCategory;
+        this.facilityOptions = new ArrayList<>();
+        this.attractionOptions = new ArrayList<>();
+        this.serviceOptions = new ArrayList<>();
+        this.amenityOptions = new ArrayList<>();
     }
 
 
-    public void edit(List<FacilityOption> facilityOption, List<AttractionOption> attractionOption, List<ServiceOption> serviceOption, List<AmenityOption> amenityOption) {
-        this.facilityOptions = facilityOption;
-        this.attractionOptions = attractionOption;
-        this.serviceOptions = serviceOption;
-        this.amenityOptions = amenityOption;
+    public void edit(List<FacilityOption> facilityOptions, List<AttractionOption> attractionOptions, List<ServiceOption> serviceOptions, List<AmenityOption> amenityOptions) {
+        this.facilityOptions = facilityOptions != null ? facilityOptions : new ArrayList<>();
+        this.attractionOptions = attractionOptions != null ? attractionOptions : new ArrayList<>();
+        this.serviceOptions = serviceOptions != null ? serviceOptions : new ArrayList<>();
+        this.amenityOptions = amenityOptions != null ? amenityOptions : new ArrayList<>();
     }
 
     public void setHotel(Hotel hotel) { this.hotel = hotel; }

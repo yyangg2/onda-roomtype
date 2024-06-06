@@ -23,7 +23,6 @@ public class RoomTypeEdit {
     private List<AmenityOption> amenityOptions = new ArrayList<>();
 
     @Builder
-
     public RoomTypeEdit(List<FacilityOption> facilityOptions, List<AttractionOption> attractionOptions, List<ServiceOption> serviceOptions, List<AmenityOption> amenityOptions) {
         this.facilityOptions = facilityOptions;
         this.attractionOptions = attractionOptions;
