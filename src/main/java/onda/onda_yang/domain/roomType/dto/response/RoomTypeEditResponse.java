@@ -2,7 +2,6 @@ package onda.onda_yang.domain.roomType.dto.response;
 
 import lombok.Builder;
 import lombok.Data;
-import onda.onda_yang.domain.roomType.entity.RoomType;
 import onda.onda_yang.domain.roomType.enumeration.amenity.AmenityOption;
 import onda.onda_yang.domain.roomType.enumeration.attraction.AttractionOption;
 import onda.onda_yang.domain.roomType.enumeration.facility.FacilityOption;
@@ -12,9 +11,9 @@ import onda.onda_yang.domain.roomType.enumeration.service.ServiceOption;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Data
-public class RoomTypeListResponse {
+public class RoomTypeEditResponse {
+
     private Long id;
     private RoomTypeCategory roomTypeName;
     private Integer totalRoom;
@@ -28,15 +27,8 @@ public class RoomTypeListResponse {
     private List<AmenityOption> amenityOptions = new ArrayList<>();
 
 
-    // 생성자 오버로딩
-    public RoomTypeListResponse(RoomType roomType) {
-        this.id = roomType.getId();
-        this.roomTypeName = roomType.getRoomTypeCategory();
-        this.totalRoom = roomType.getTotalRoom();
-    }
-
     @Builder
-    public RoomTypeListResponse(Long id, RoomTypeCategory roomTypeName, Integer totalRoom, List<FacilityOption> facilityOptions, List<AttractionOption> attractionOptions, List<ServiceOption> serviceOptions, List<AmenityOption> amenityOptions) {
+    public RoomTypeEditResponse(Long id, RoomTypeCategory roomTypeName, Integer totalRoom, List<FacilityOption> facilityOptions, List<AttractionOption> attractionOptions, List<ServiceOption> serviceOptions, List<AmenityOption> amenityOptions) {
         this.id = id;
         this.roomTypeName = roomTypeName;
         this.totalRoom = totalRoom;

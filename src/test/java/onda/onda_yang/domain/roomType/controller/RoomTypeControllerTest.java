@@ -6,7 +6,6 @@ import onda.onda_yang.domain.hotel.entity.Hotel;
 import onda.onda_yang.domain.hotel.repository.HotelRepository;
 import onda.onda_yang.domain.roomType.dto.request.RoomTypeEdit;
 import onda.onda_yang.domain.roomType.dto.request.RoomTypeRequest;
-import onda.onda_yang.domain.roomType.dto.response.RoomTypeListResponse;
 import onda.onda_yang.domain.roomType.entity.RoomType;
 import onda.onda_yang.domain.roomType.enumeration.amenity.AmenityOption;
 import onda.onda_yang.domain.roomType.enumeration.attraction.AttractionOption;
@@ -20,15 +19,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.regex.Matcher;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.http.MediaType.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -105,17 +102,17 @@ class RoomTypeControllerTest {
         roomType.addAmenityOption(AmenityOption.AIR_CONDITIONER);
         roomType.addAmenityOption(AmenityOption.BIDET);
 
-        roomTypeRepository.save(roomType); // // 저장하여 영속화
+        roomTypeRepository.save(roomType);
 
         // expected
         mockMvc.perform(get("/v1/room-types/{roomTypeId}", roomType.getId())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(roomType.getId()))
-                .andExpect(jsonPath("$.roomTypeName").value(roomType.getRoomTypeCategory().toString()))
-                .andExpect(jsonPath("$.totalRoom").value(roomType.getTotalRoom()))
-                .andExpect(jsonPath("$.facilityOptions[0]").value(roomType.getFacilityOptions().get(0).toString()))
-                .andExpect(jsonPath("$.facilityOptions[1]").value(roomType.getFacilityOptions().get(1).toString()))
+                .andExpect(jsonPath("$.data.id").value(roomType.getId()))
+                .andExpect(jsonPath("$.data.roomTypeName").value(roomType.getRoomTypeCategory().toString()))
+                .andExpect(jsonPath("$.data.totalRoom").value(roomType.getTotalRoom()))
+                .andExpect(jsonPath("$.data.facilityOptions[0]").value(roomType.getFacilityOptions().get(0).toString()))
+                .andExpect(jsonPath("$.data.facilityOptions[1]").value(roomType.getFacilityOptions().get(1).toString()))
                 .andDo(print());
     }
 
@@ -152,10 +149,11 @@ class RoomTypeControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(2)))
-                .andExpect(jsonPath("$[0].roomTypeName").value(hotel.getRoomTypes().get(0).getRoomTypeCategory().toString()))
-                .andExpect(jsonPath("$[0].totalRoom").value(hotel.getRoomTypes().get(0).getTotalRoom()))
+                .andExpect(jsonPath("$.data.[0].roomTypeName").value(hotel.getRoomTypes().get(0).getRoomTypeCategory().toString()))
+                .andExpect(jsonPath("$.data.[0].totalRoom").value(hotel.getRoomTypes().get(0).getTotalRoom()))
                 .andDo(print());
     }
+
 
     @Test
     @DisplayName("객실타입 수정")
@@ -189,6 +187,7 @@ class RoomTypeControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print());
     }
+
 
     @Test
     @DisplayName("객실타입 삭제")

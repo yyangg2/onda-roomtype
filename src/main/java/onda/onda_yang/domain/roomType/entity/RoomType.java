@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import onda.onda_yang.domain.hotel.entity.Hotel;
+import onda.onda_yang.domain.roomType.dto.response.RoomTypeEditResponse;
 import onda.onda_yang.domain.roomType.enumeration.amenity.AmenityConverter;
 import onda.onda_yang.domain.roomType.enumeration.amenity.AmenityOption;
 import onda.onda_yang.domain.roomType.enumeration.attraction.AttractionConverter;

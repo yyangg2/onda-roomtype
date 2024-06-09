@@ -86,7 +86,7 @@ class RoomTypeServiceTest {
         roomType.addAmenityOption(AmenityOption.AIR_CONDITIONER);
         roomType.addAmenityOption(AmenityOption.BIDET);
 
-        roomType = roomTypeRepository.save(roomType); // // 저장하여 영속화
+        roomType = roomTypeRepository.save(roomType);
 
         // when
         RoomTypeResponse response = roomTypeService.get(roomType.getId());
@@ -135,6 +135,7 @@ class RoomTypeServiceTest {
         assertEquals(3, roomTypes.get(1).getTotalRoom());
     }
 
+
     @Test
     @DisplayName("객실타입 수정")
     void test4() {
@@ -152,7 +153,7 @@ class RoomTypeServiceTest {
         roomType.addAmenityOption(AmenityOption.AIR_CONDITIONER);
         roomType.addAmenityOption(AmenityOption.BIDET);
 
-        roomTypeRepository.save(roomType); // // 저장하여 영속화
+        roomTypeRepository.save(roomType);
 
         RoomTypeEdit roomTypeEdit = RoomTypeEdit.builder()
                 .facilityOptions(List.of(FacilityOption.FITNESS))
@@ -173,6 +174,7 @@ class RoomTypeServiceTest {
         assertEquals(AttractionOption.GOLF, changedRoomType.getAttractionOptions().get(1));
 
     }
+
 
     @Test
     @DisplayName("객실타입 삭제")

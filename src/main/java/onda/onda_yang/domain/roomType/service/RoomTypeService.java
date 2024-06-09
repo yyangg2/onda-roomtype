@@ -9,6 +9,7 @@ import onda.onda_yang.domain.hotel.exception.HotelNotFound;
 import onda.onda_yang.domain.hotel.repository.HotelRepository;
 import onda.onda_yang.domain.roomType.dto.request.RoomTypeEdit;
 import onda.onda_yang.domain.roomType.dto.request.RoomTypeRequest;
+import onda.onda_yang.domain.roomType.dto.response.RoomTypeEditResponse;
 import onda.onda_yang.domain.roomType.dto.response.RoomTypeListResponse;
 import onda.onda_yang.domain.roomType.dto.response.RoomTypeResponse;
 import onda.onda_yang.domain.roomType.entity.RoomType;
@@ -20,6 +21,8 @@ import onda.onda_yang.domain.roomType.enumeration.roomType.RoomTypeCategory;
 import onda.onda_yang.domain.roomType.enumeration.service.ServiceOption;
 import onda.onda_yang.domain.roomType.exception.RoomTypeNotFound;
 import onda.onda_yang.domain.roomType.repository.RoomTypeRepository;
+import onda.onda_yang.domain.roomType.util.RoomTypeMapper;
+import onda.onda_yang.global.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -88,7 +91,7 @@ public class RoomTypeService {
     @Transactional
     public void post(Long hotelId, RoomTypeRequest request) {
         Hotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(HotelNotFound::new);
+                .orElseThrow(() -> new HotelNotFound(ErrorCode.INVALID_HOTEL_EXCEPTION));
 
         RoomTypeCategory roomTypeName = request.getRoomTypeName();
         Integer totalRoom = request.getTotalRoom();
@@ -138,47 +141,137 @@ public class RoomTypeService {
         roomTypeRepository.save(roomType);
     }
 
+//    public RoomTypeResponse get(Long roomTypeId) {
+//        RoomType roomType = roomTypeRepository.findById(roomTypeId)
+//                .orElseThrow(RoomTypeNotFound::new);
+//
+//        return RoomTypeResponse.builder()
+//                .id(roomType.getId())
+//                .roomTypeName(roomType.getRoomTypeCategory())
+//                .totalRoom(roomType.getTotalRoom())
+//                .facilityOptions(roomType.getFacilityOptions())
+//                .attractionOptions(roomType.getAttractionOptions())
+//                .serviceOptions(roomType.getServiceOptions())
+//                .amenityOptions(roomType.getAmenityOptions())
+//                .build();
+//    }
+
+//    public RoomTypeResponse get(Long roomTypeId) {
+//        RoomType roomType = roomTypeRepository.findById(roomTypeId)
+//                .orElseThrow(() -> new RoomTypeNotFound(ErrorCode.INVALID_ROOMTYPE_EXCEPTION));
+//
+//        return RoomTypeResponse.builder()
+//                .id(roomType.getId())
+//                .roomTypeName(roomType.getRoomTypeCategory())
+//                .totalRoom(roomType.getTotalRoom())
+//                .facilityOptions(roomType.getFacilityOptions())
+//                .attractionOptions(roomType.getAttractionOptions())
+//                .serviceOptions(roomType.getServiceOptions())
+//                .amenityOptions(roomType.getAmenityOptions())
+//                .build();
+//    }
+
     public RoomTypeResponse get(Long roomTypeId) {
         RoomType roomType = roomTypeRepository.findById(roomTypeId)
-                .orElseThrow(RoomTypeNotFound::new);
+                .orElseThrow(() -> new RoomTypeNotFound(ErrorCode.INVALID_ROOMTYPE_EXCEPTION));
 
-        return RoomTypeResponse.builder()
-                .id(roomType.getId())
-                .roomTypeName(roomType.getRoomTypeCategory())
-                .totalRoom(roomType.getTotalRoom())
-                .facilityOptions(roomType.getFacilityOptions())
-                .attractionOptions(roomType.getAttractionOptions())
-                .serviceOptions(roomType.getServiceOptions())
-                .amenityOptions(roomType.getAmenityOptions())
-                .build();
+        return RoomTypeMapper.toRoomTypeResponse(roomType);
     }
+
+//    public List<RoomTypeListResponse> getList(Long hotelId) {
+//        Hotel hotel = hotelRepository.findById(hotelId)
+//        .orElseThrow(HotelNotFound::new);
+//
+//        return roomTypeRepository.findByHotelId(hotel.getId()).stream()
+//                .map(RoomTypeListResponse::new)
+//                .collect(Collectors.toList());
+//    }
 
     public List<RoomTypeListResponse> getList(Long hotelId) {
         Hotel hotel = hotelRepository.findById(hotelId)
-        .orElseThrow(HotelNotFound::new);
+                .orElseThrow(() -> new HotelNotFound(ErrorCode.INVALID_HOTEL_EXCEPTION));
 
         return roomTypeRepository.findByHotelId(hotel.getId()).stream()
                 .map(RoomTypeListResponse::new)
                 .collect(Collectors.toList());
     }
 
+
+//    @Transactional
+//    public void edit(Long id, RoomTypeEdit roomTypeEdit) {
+//        RoomType roomType = roomTypeRepository.findById(id)
+//                .orElseThrow(RoomTypeNotFound::new);
+//
+//        roomType.edit(roomTypeEdit.getFacilityOptions(), roomTypeEdit.getAttractionOptions(), roomTypeEdit.getServiceOptions(), roomTypeEdit.getAmenityOptions());
+//    }
+
     @Transactional
-    public void edit(Long id, RoomTypeEdit roomTypeEdit) {
+    public RoomTypeEditResponse edit(Long id, RoomTypeEdit roomTypeEdit) {
         RoomType roomType = roomTypeRepository.findById(id)
-                .orElseThrow(RoomTypeNotFound::new);
+                .orElseThrow(() -> new RoomTypeNotFound(ErrorCode.INVALID_ROOMTYPE_EXCEPTION));
 
         roomType.edit(roomTypeEdit.getFacilityOptions(), roomTypeEdit.getAttractionOptions(), roomTypeEdit.getServiceOptions(), roomTypeEdit.getAmenityOptions());
+
+        return RoomTypeMapper.toRoomTypeEditResponse(roomType);
     }
+//    @Transactional
+//    public void delete(Long id) {
+//        RoomType roomType = roomTypeRepository.findById(id)
+//                .orElseThrow(RoomTypeNotFound::new);
+//
+//        roomTypeRepository.delete(roomType);
+//    }
 
     @Transactional
     public void delete(Long id) {
         RoomType roomType = roomTypeRepository.findById(id)
-                .orElseThrow(RoomTypeNotFound::new);
+                .orElseThrow(() -> new RoomTypeNotFound(ErrorCode.INVALID_ROOMTYPE_EXCEPTION));
 
         roomTypeRepository.delete(roomType);
     }
 
 }
+
+
+//public RoomTypeResponse get(Long roomTypeId) {
+//    RoomType roomType = roomTypeRepository.findById(roomTypeId)
+//            .orElseThrow(() -> new RoomTypeNotFound(ErrorCode.INVALID_ROOMTYPE_EXCEPTION));
+//
+//    return RoomTypeResponse.builder()
+//            .id(roomType.getId())
+//            .roomTypeName(roomType.getRoomTypeCategory())
+//            .totalRoom(roomType.getTotalRoom())
+//            .facilityOptions(roomType.getFacilityOptions())
+//            .attractionOptions(roomType.getAttractionOptions())
+//            .serviceOptions(roomType.getServiceOptions())
+//            .amenityOptions(roomType.getAmenityOptions())
+//            .build();
+//}
+//
+//public List<RoomTypeListResponse> getList(Long hotelId) {
+//    Hotel hotel = hotelRepository.findById(hotelId)
+//            .orElseThrow(() -> new HotelNotFound(ErrorCode.INVALID_HOTEL_EXCEPTION));
+//
+//    return roomTypeRepository.findByHotelId(hotel.getId()).stream()
+//            .map(RoomTypeListResponse::new)
+//            .collect(Collectors.toList());
+//}
+//
+//@Transactional
+//public void edit(Long id, RoomTypeEdit roomTypeEdit) {
+//    RoomType roomType = roomTypeRepository.findById(id)
+//            .orElseThrow(() -> new RoomTypeNotFound(ErrorCode.INVALID_ROOMTYPE_EXCEPTION));
+//
+//    roomType.edit(roomTypeEdit.getFacilityOptions(), roomTypeEdit.getAttractionOptions(), roomTypeEdit.getServiceOptions(), roomTypeEdit.getAmenityOptions());
+//}
+//
+//@Transactional
+//public void delete(Long id) {
+//    RoomType roomType = roomTypeRepository.findById(id)
+//            .orElseThrow(() -> new RoomTypeNotFound(ErrorCode.INVALID_ROOMTYPE_EXCEPTION));
+//
+//    roomTypeRepository.delete(roomType);
+
 
 
 
